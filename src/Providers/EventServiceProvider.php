@@ -15,8 +15,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         QueryExecuted::class => [
-            LogDatabaseQueries::class
-        ]
+            LogDatabaseQueries::class,
+        ],
     ];
 
     /**

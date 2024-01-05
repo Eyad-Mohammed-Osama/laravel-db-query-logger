@@ -6,6 +6,6 @@ class XmlFileDriver extends AbstractDriver
 {
     public function log(): void
     {
-        echo "Hello from XmlFileDriver";
+        echo 'Hello from XmlFileDriver';
     }
 }
