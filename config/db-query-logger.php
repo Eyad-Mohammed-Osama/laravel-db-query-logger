@@ -10,18 +10,18 @@ use EyadBereh\LaravelDbQueryLogger\Enums\SqlStatements;
 return [
     'enabled' => env('LARAVEL_DB_QUERY_LOGGER_ENABLED', true), // you can also specify an array of environments if you want
 
-    'slower_than' => 1000, // in milliseconds, nullable
+    // defines the threshold of time a query takes to execute
+    // so that it can be logged, in milliseconds, and nullable
+    'query_time_threshold' => 1000,
 
-    'keep_for' => 7, // how many time before deletion
+    // 'include_tables' => null, // you can define an array of tables to log, or leave as null
 
-    'include_tables' => null, // you can define an array of tables to log, or leave as null
-
-    // tables to exclude from logging, it will be ignored if the "include_tables" option is set
-    'exclude_tables' => [
-        'migrations',
-        'jobs',
-        'failed_jobs',
-    ],
+    // // tables to exclude from logging, it will be ignored if the "include_tables" option is set
+    // 'exclude_tables' => [
+    //     'migrations',
+    //     'jobs',
+    //     'failed_jobs',
+    // ],
 
     'connections' => null, // an array of database connections to listen to, by default it listens to all connections
 
@@ -33,7 +33,7 @@ return [
         SqlStatements::DELETE,
     ],
 
-    'driver' => env('LARAVEL_DB_QUERY_LOGGER_ENABLED', 'log_file'),
+    'driver' => env('LARAVEL_DB_QUERY_LOGGER_DRIVER', 'log_file'),
 
     'drivers' => [
         'log_file' => [

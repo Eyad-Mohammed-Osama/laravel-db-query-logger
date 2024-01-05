@@ -26,6 +26,7 @@ class LaravelDbQueryLoggerServiceProvider extends PackageServiceProvider
 
         $driver = config('db-query-logger.driver');
         $driver_info = config("db-query-logger.drivers.$driver");
+
         $concrete = $driver_info['concrete'];
 
         $reflectionClass = new \ReflectionClass($concrete);
@@ -34,11 +35,11 @@ class LaravelDbQueryLoggerServiceProvider extends PackageServiceProvider
             throw new \Exception("The specified logging driver [$concrete] must not be abstract");
         }
 
-        if (! $reflectionClass->isInstantiable()) {
+        if (!$reflectionClass->isInstantiable()) {
             throw new \Exception("The specified logging driver [$concrete] must be instantiatable");
         }
 
-        if (! $reflectionClass->isSubclassOf(AbstractDriver::class)) {
+        if (!$reflectionClass->isSubclassOf(AbstractDriver::class)) {
             throw new \Exception("The specified logging driver [$concrete] must extend the class [EyadBereh\\LaravelDbQueryLogger\\Drivers\\AbstractDriver]");
         }
 

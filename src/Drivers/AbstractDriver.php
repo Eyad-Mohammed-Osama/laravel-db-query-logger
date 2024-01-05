@@ -18,18 +18,18 @@ abstract class AbstractDriver
         $type = $info['type'];
         $statement_type = SqlStatements::tryFrom($type);
         $statement_types = config('db-query-logger.statements');
-        $slower_than = config('db-query-logger.slower_than');
+        $query_time_threshold = config('db-query-logger.query_time_threshold');
         $connections = config('db-query-logger.connections');
 
-        if (! in_array($statement_type, $statement_types)) {
+        if (!in_array($statement_type, $statement_types)) {
             return;
         }
 
-        if (! is_null($slower_than) && $this->event->time < $slower_than) {
+        if (!is_null($query_time_threshold) && $this->event->time < $query_time_threshold) {
             return;
         }
 
-        if (! is_null($connections) && ! in_array($this->event->connectionName, $connections)) {
+        if (!is_null($connections) && !in_array($this->event->connectionName, $connections)) {
             return;
         }
 
