@@ -12,11 +12,11 @@ class LogFileDriver extends AbstractDriver
         $path = config('db-query-logger.drivers.log_file.path');
         $filename = "$date.log";
         $fullpath = "$path/$filename";
-        $content = $this->getCompiledMessage().PHP_EOL;
+        $content = $this->getCompiledMessage() . PHP_EOL;
 
         File::ensureDirectoryExists($path);
 
-        if (! File::exists($fullpath)) {
+        if (!File::exists($fullpath)) {
             File::put($fullpath, $content);
         } else {
             File::append($fullpath, $content);
