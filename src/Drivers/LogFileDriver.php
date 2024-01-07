@@ -36,7 +36,7 @@ class LogFileDriver extends AbstractDriver
             ':query:' => $this->event->sql,
             ':bindings:' => json_encode($this->event->bindings),
             ':time:' => $this->event->time,
-            ':connection:' => $this->event->connection->getName(),
+            ':connection:' => $this->event->connectionName,
         ];
 
         return strtr($format, $data); // compile and return the formatted message
