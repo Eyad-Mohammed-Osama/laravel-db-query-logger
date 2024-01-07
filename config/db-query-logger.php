@@ -37,8 +37,7 @@ return [
     'drivers' => [
         'log_file' => [
             'concrete' => LogFileDriver::class,
-            'path' => storage_path('db-query-logger'),
-            'message_format' => '[:datetime:] - [:statement_type:] - [query = :query:] - [bindings = :bindings:] - [time = :time: ms] - [connection = :connection:]',
+            'path' => storage_path('db-query-logger')
         ],
         'json_file' => [
             'concrete' => JsonFileDriver::class,
