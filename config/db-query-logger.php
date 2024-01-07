@@ -37,7 +37,7 @@ return [
     'drivers' => [
         'log_file' => [
             'concrete' => LogFileDriver::class,
-            'path' => storage_path('db-query-logger')
+            'path' => storage_path('db-query-logger'),
         ],
         'json_file' => [
             'concrete' => JsonFileDriver::class,

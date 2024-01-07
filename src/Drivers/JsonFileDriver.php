@@ -16,7 +16,7 @@ class JsonFileDriver extends AbstractDriver
 
         File::ensureDirectoryExists($path);
 
-        if (!File::exists($fullpath)) {
+        if (! File::exists($fullpath)) {
             $content = [$content];
             $content = json_encode($content, JSON_PRETTY_PRINT);
             File::put($fullpath, $content);
@@ -29,7 +29,7 @@ class JsonFileDriver extends AbstractDriver
 
             $file = fopen($fullpath, 'a');
             $content = json_encode($content, JSON_PRETTY_PRINT);
-            fwrite($file, ",\n" . $content . "\n]");
+            fwrite($file, ",\n".$content."\n]");
             fclose($file);
         }
     }
