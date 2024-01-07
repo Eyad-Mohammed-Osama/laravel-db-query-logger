@@ -4,7 +4,6 @@
 
 use EyadBereh\LaravelDbQueryLogger\Drivers\JsonFileDriver;
 use EyadBereh\LaravelDbQueryLogger\Drivers\LogFileDriver;
-use EyadBereh\LaravelDbQueryLogger\Drivers\XmlFileDriver;
 use EyadBereh\LaravelDbQueryLogger\Enums\SqlStatements;
 
 return [
