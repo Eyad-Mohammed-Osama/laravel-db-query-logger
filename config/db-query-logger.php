@@ -44,12 +44,6 @@ return [
         'json_file' => [
             'concrete' => JsonFileDriver::class,
             'path' => storage_path('db-query-logger'),
-
-        ],
-        'xml_file' => [
-            'concrete' => XmlFileDriver::class,
-            'path' => storage_path('db-query-logger'),
-
-        ],
+        ]
     ],
 ];
