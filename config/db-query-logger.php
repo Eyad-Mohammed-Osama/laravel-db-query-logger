@@ -9,7 +9,7 @@ use EyadBereh\LaravelDbQueryLogger\Enums\SqlStatements;
 return [
     'enabled' => env('LARAVEL_DB_QUERY_LOGGER_ENABLED', true),
 
-    'environments' => env('LARAVEL_DB_QUERY_LOGGER_ENVIRONMENTS') ? explode(",", env('LARAVEL_DB_QUERY_LOGGER_ENVIRONMENTS')) : NULL, // an array of environments
+    'environments' => env('LARAVEL_DB_QUERY_LOGGER_ENVIRONMENTS') ? explode(',', env('LARAVEL_DB_QUERY_LOGGER_ENVIRONMENTS')) : null, // an array of environments
 
     // defines the threshold of time a query takes to execute
     // so that it can be logged, in milliseconds, and nullable
@@ -32,19 +32,19 @@ return [
             'concrete' => LogFileDriver::class,
             'path' => storage_path('db-query-logger'),
             'message_format' => '[:datetime:] - [:statement_type:] - [query = :query:] - [bindings = :bindings:] - [time = :time: ms] - [connection = :connection:]',
-            'use_laravel_logs' => false
+            'use_laravel_logs' => false,
         ],
         'json_file' => [
             'concrete' => JsonFileDriver::class,
             'path' => storage_path('db-query-logger'),
             'schema' => [
-                'datetime' => ":datetime:",
-                'statement_type' => ":statement_type:",
-                'query' => ":query:",
-                'bindings' => ":bindings:",
-                'time' => ":time:",
-                'connection' => ":connection:",
-            ]
+                'datetime' => ':datetime:',
+                'statement_type' => ':statement_type:',
+                'query' => ':query:',
+                'bindings' => ':bindings:',
+                'time' => ':time:',
+                'connection' => ':connection:',
+            ],
         ],
     ],
 ];

@@ -16,8 +16,8 @@ abstract class AbstractDriver
     public function store()
     {
         $environment = App::environment();
-        $is_enabled = config("db-query-logger.enabled");
-        if (!$is_enabled) {
+        $is_enabled = config('db-query-logger.enabled');
+        if (! $is_enabled) {
             return;
         }
 
@@ -28,15 +28,15 @@ abstract class AbstractDriver
         $query_time_threshold = config('db-query-logger.query_time_threshold');
         $connections = config('db-query-logger.connections');
 
-        if (!in_array($statement_type, $statement_types)) {
+        if (! in_array($statement_type, $statement_types)) {
             return;
         }
 
-        if (!is_null($query_time_threshold) && $this->event->time < $query_time_threshold) {
+        if (! is_null($query_time_threshold) && $this->event->time < $query_time_threshold) {
             return;
         }
 
-        if (!is_null($connections) && !in_array($this->event->connectionName, $connections)) {
+        if (! is_null($connections) && ! in_array($this->event->connectionName, $connections)) {
             return;
         }
 
