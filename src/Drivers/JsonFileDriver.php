@@ -21,6 +21,7 @@ class JsonFileDriver extends AbstractDriver
             $content = json_encode($content, JSON_PRETTY_PRINT);
             File::put($fullpath, $content);
         } else {
+            // What the hell are you doing, my uncle ?
             $file = fopen($fullpath, 'a+');
             $stats = fstat($file);
             $size = $stats['size'];
@@ -38,7 +39,6 @@ class JsonFileDriver extends AbstractDriver
     {
         $info = $this->getQueryInfo(); // obtain query information
 
-        // prepare placeholders data for compilation
         $data = [
             'datetime' => now()->format('Y-m-d H:i:s'),
             'statement_type' => $info['type'],
@@ -48,6 +48,24 @@ class JsonFileDriver extends AbstractDriver
             'connection' => $this->event->connectionName,
         ];
 
-        return $data; // compile and return the formatted message
+        $schema = config("db-query-logger.drivers.json_file.schema");
+
+        $object = $this->compileJsonSchema($schema, $data);        
+
+        return $object; // compile and return the formatted message
+    }
+
+    private function compileJsonSchema($schema, $data) {
+        $compiled_schema = [];
+        foreach ($schema as $key => $value) {
+            if (is_array($value)) {
+                $compiled_schema[$key] = $this->compileJsonSchema($value, $data);
+            }
+            else {
+                $value = $data[$key];
+                $compiled_schema[$key] = $value;
+            }
+        }
+        return $compiled_schema;
     }
 }

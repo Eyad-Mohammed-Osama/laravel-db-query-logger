@@ -3,23 +3,31 @@
 namespace EyadBereh\LaravelDbQueryLogger\Drivers;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class LogFileDriver extends AbstractDriver
 {
     public function log(): void
     {
-        $date = now()->format('Y-m-d');
-        $path = config('db-query-logger.drivers.log_file.path');
-        $filename = "$date.log";
-        $fullpath = "$path/$filename";
-        $content = $this->getCompiledMessage() . PHP_EOL;
+        $content = $this->getCompiledMessage();
+        $use_laravel_logs = config("db-query-logger.drivers.log_file.use_laravel_logs");
 
-        File::ensureDirectoryExists($path);
-
-        if (!File::exists($fullpath)) {
-            File::put($fullpath, $content);
+        if ($use_laravel_logs) {
+            Log::notice($content);
         } else {
-            File::append($fullpath, $content);
+            $date = now()->format('Y-m-d');
+            $path = config('db-query-logger.drivers.log_file.path');
+            $filename = "$date.log";
+            $fullpath = "$path/$filename";
+
+            File::ensureDirectoryExists($path);
+
+            $content = $content . "\n";
+            if (!File::exists($fullpath)) {
+                File::put($fullpath, $content);
+            } else {
+                File::append($fullpath, $content);
+            }
         }
     }
 
@@ -27,7 +35,7 @@ class LogFileDriver extends AbstractDriver
     {
         $info = $this->getQueryInfo(); // obtain query information
 
-        $format = "[:datetime:] - [:statement_type:] - [query = :query:] - [bindings = :bindings:] - [time = :time: ms] - [connection = :connection:]"; // get log message format
+        $format = config("db-query-logger.drivers.log_file.message_format"); // get log message format
 
         // prepare placeholders data for compilation
         $data = [
