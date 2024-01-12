@@ -10,7 +10,7 @@ class LogFileDriver extends AbstractDriver
     public function log(): void
     {
         $content = $this->getCompiledMessage();
-        $use_laravel_logs = config("db-query-logger.drivers.log_file.use_laravel_logs");
+        $use_laravel_logs = config('db-query-logger.drivers.log_file.use_laravel_logs');
 
         if ($use_laravel_logs) {
             Log::notice($content);
@@ -22,8 +22,8 @@ class LogFileDriver extends AbstractDriver
 
             File::ensureDirectoryExists($path);
 
-            $content = $content . "\n";
-            if (!File::exists($fullpath)) {
+            $content = $content."\n";
+            if (! File::exists($fullpath)) {
                 File::put($fullpath, $content);
             } else {
                 File::append($fullpath, $content);
@@ -35,7 +35,7 @@ class LogFileDriver extends AbstractDriver
     {
         $info = $this->getQueryInfo(); // obtain query information
 
-        $format = config("db-query-logger.drivers.log_file.message_format"); // get log message format
+        $format = config('db-query-logger.drivers.log_file.message_format'); // get log message format
 
         // prepare placeholders data for compilation
         $data = [

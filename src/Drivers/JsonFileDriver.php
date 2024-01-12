@@ -48,24 +48,25 @@ class JsonFileDriver extends AbstractDriver
             'connection' => $this->event->connectionName,
         ];
 
-        $schema = config("db-query-logger.drivers.json_file.schema");
+        $schema = config('db-query-logger.drivers.json_file.schema');
 
-        $object = $this->compileJsonSchema($schema, $data);        
+        $object = $this->compileJsonSchema($schema, $data);
 
         return $object; // compile and return the formatted message
     }
 
-    private function compileJsonSchema($schema, $data) {
+    private function compileJsonSchema($schema, $data)
+    {
         $compiled_schema = [];
         foreach ($schema as $key => $value) {
             if (is_array($value)) {
                 $compiled_schema[$key] = $this->compileJsonSchema($value, $data);
-            }
-            else {
+            } else {
                 $value = $data[$key];
                 $compiled_schema[$key] = $value;
             }
         }
+
         return $compiled_schema;
     }
 }
