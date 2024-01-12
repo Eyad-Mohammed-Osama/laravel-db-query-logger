@@ -15,32 +15,10 @@ abstract class AbstractDriver
 
     public function store()
     {
-        $environment = App::environment();
-        $is_enabled = config("db-query-logger.enabled");
-        if (!$is_enabled) {
-            return;
+        $can_log = $this->canLogQueries();
+        if ($can_log) {
+            $this->log();
         }
-
-        $info = $this->getQueryInfo();
-        $type = $info['type'];
-        $statement_type = SqlStatements::tryFrom($type);
-        $statement_types = config('db-query-logger.statements');
-        $query_time_threshold = config('db-query-logger.query_time_threshold');
-        $connections = config('db-query-logger.connections');
-
-        if (!in_array($statement_type, $statement_types)) {
-            return;
-        }
-
-        if (!is_null($query_time_threshold) && $this->event->time < $query_time_threshold) {
-            return;
-        }
-
-        if (!is_null($connections) && !in_array($this->event->connectionName, $connections)) {
-            return;
-        }
-
-        $this->log();
     }
 
     final public function setEvent(QueryExecuted $event): void
@@ -57,5 +35,30 @@ abstract class AbstractDriver
             'type' => $info['querytype'],
         ];
         // return Query::getAll($query);
+    }
+
+    private function canLogQueries(): bool {
+        $info = $this->getQueryInfo();
+        $type = $info['type'];
+        $statement_type = SqlStatements::tryFrom($type);
+        $statement_types = config('db-query-logger.statements');
+        $query_time_threshold = config('db-query-logger.query_time_threshold');
+        $connections = config('db-query-logger.connections');
+        $environments = config('db-query-logger.environments');
+
+        $conditions = [
+            "statement_types_filter" => in_array($statement_type, $statement_types),
+            "execution_time_filter" => is_null($query_time_threshold) || $this->event->time >= $query_time_threshold,
+            "connections_filter" => is_null($connections) || in_array($this->event->connectionName, $connections),
+            "environments_filter" => is_null($environments) || App::environment($environments),
+            "is_enabled" => config("db-query-logger.enabled")
+        ];
+
+        foreach ($conditions as $name => $is_satisfied) {
+            if (!$is_satisfied)
+                return false;
+        }
+
+        return true;
     }
 }
