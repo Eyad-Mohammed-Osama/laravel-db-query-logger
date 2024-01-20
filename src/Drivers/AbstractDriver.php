@@ -39,7 +39,8 @@ abstract class AbstractDriver
         // return Query::getAll($query);
     }
 
-    private function canLogQueries(): bool {
+    private function canLogQueries(): bool
+    {
         $info = $this->getQueryInfo();
         $type = $info['type'];
         $statement_type = SqlStatements::tryFrom($type);
@@ -49,16 +50,17 @@ abstract class AbstractDriver
         $environments = config('db-query-logger.environments');
 
         $conditions = [
-            "statement_types_filter" => in_array($statement_type, $statement_types),
-            "execution_time_filter" => is_null($query_time_threshold) || $this->event->time >= $query_time_threshold,
-            "connections_filter" => is_null($connections) || in_array($this->event->connectionName, $connections),
-            "environments_filter" => is_null($environments) || App::environment($environments),
-            "is_enabled" => config("db-query-logger.enabled")
+            'statement_types_filter' => in_array($statement_type, $statement_types),
+            'execution_time_filter' => is_null($query_time_threshold) || $this->event->time >= $query_time_threshold,
+            'connections_filter' => is_null($connections) || in_array($this->event->connectionName, $connections),
+            'environments_filter' => is_null($environments) || App::environment($environments),
+            'is_enabled' => config('db-query-logger.enabled'),
         ];
 
         foreach ($conditions as $name => $is_satisfied) {
-            if (!$is_satisfied)
+            if (! $is_satisfied) {
                 return false;
+            }
         }
 
         return true;
