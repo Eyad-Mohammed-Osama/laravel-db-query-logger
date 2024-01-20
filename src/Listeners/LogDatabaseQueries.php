@@ -3,10 +3,7 @@
 namespace EyadBereh\LaravelDbQueryLogger\Listeners;
 
 use EyadBereh\LaravelDbQueryLogger\Drivers\AbstractDriver;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Events\QueryExecuted;
-use PhpMyAdmin\SqlParser\Parser;
-use PhpMyAdmin\SqlParser\Utils\Query;
 
 class LogDatabaseQueries
 {

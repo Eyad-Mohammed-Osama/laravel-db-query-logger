@@ -50,7 +50,7 @@ class LogFileDriver extends AbstractDriver
         return strtr($format, $data); // compile and return the formatted message
     }
 
-    public function getLogs(?string $date = null): array|null
+    public function getLogs(?string $date = null): ?array
     {
         // TODO: Implement getLogs() method.
         return null;

@@ -13,7 +13,7 @@ abstract class AbstractDriver
 
     abstract protected function writeLog(): void;
 
-    abstract public function getLogs(?string $date = null): array|null;
+    abstract public function getLogs(?string $date = null): ?array;
 
     public function store()
     {
