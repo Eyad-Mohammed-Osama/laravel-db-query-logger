@@ -3,10 +3,11 @@
 namespace EyadBereh\LaravelDbQueryLogger\Drivers;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class JsonFileDriver extends AbstractDriver
 {
-    public function log(): void
+    public function writeLog(): void
     {
         $date = now()->format('Y-m-d');
         $path = config('db-query-logger.drivers.json_file.path');
@@ -33,6 +34,55 @@ class JsonFileDriver extends AbstractDriver
             fwrite($file, ",\n".$content."\n]");
             fclose($file);
         }
+    }
+
+    public function getLogs(?string $date = null, bool $dates_as_keys = true): array|null
+    {
+        if ($date) {
+            return $this->getLog($date);
+        }
+        $path = config('db-query-logger.drivers.json_file.path');
+        $files = File::files($path);
+        $contents = [];
+
+        foreach ($files as $file) {
+            $filename = pathinfo($file, PATHINFO_FILENAME);
+            if ($dates_as_keys) {
+                $contents[$filename] = $this->getLog($filename);
+            }
+            else {
+                $logs = $this->getLog($filename);
+                foreach($logs as $log) {
+                    $contents[] = $log;
+                }
+            }
+        }
+        return $contents;
+    }
+
+    private function getLog(string $date): array|null
+    {
+        $filename = "$date.json";
+        $path = config('db-query-logger.drivers.json_file.path');
+        $fullpath = "$path/$filename";
+        if (!File::exists($fullpath)) {
+            return null;
+        }
+
+        $contents = File::get($fullpath);
+
+        $validator = Validator::make([
+            "contents" => $contents
+        ], [
+            "contents" => ["json"]
+        ]);
+
+        if ($validator->fails()) {
+            throw new \Exception("File [$filename] at [$path] is not a valid JSON file.");
+        }
+
+        $contents = json_decode($contents, true);
+        return $contents;
     }
 
     private function getJsonObject()
@@ -69,4 +119,5 @@ class JsonFileDriver extends AbstractDriver
 
         return $compiled_schema;
     }
+
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class LogFileDriver extends AbstractDriver
 {
-    public function log(): void
+    public function writeLog(): void
     {
         $content = $this->getCompiledMessage();
         $use_laravel_logs = config('db-query-logger.drivers.log_file.use_laravel_logs');
@@ -48,5 +48,11 @@ class LogFileDriver extends AbstractDriver
         ];
 
         return strtr($format, $data); // compile and return the formatted message
+    }
+
+    public function getLogs(?string $date = null): array|null
+    {
+        // TODO: Implement getLogs() method.
+        return null;
     }
 }

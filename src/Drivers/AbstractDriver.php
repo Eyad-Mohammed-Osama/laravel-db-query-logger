@@ -11,13 +11,15 @@ abstract class AbstractDriver
 {
     protected QueryExecuted $event;
 
-    abstract protected function log(): void;
+    abstract protected function writeLog(): void;
+
+    abstract public function getLogs(?string $date = null): array|null;
 
     public function store()
     {
         $can_log = $this->canLogQueries();
         if ($can_log) {
-            $this->log();
+            $this->writeLog();
         }
     }
 
