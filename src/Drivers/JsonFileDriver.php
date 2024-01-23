@@ -36,7 +36,7 @@ class JsonFileDriver extends AbstractDriver
         }
     }
 
-    public function getLogs(?string $date = null, bool $dates_as_keys = true): array|null
+    public function getLogs(?string $date = null, bool $dates_as_keys = true): ?array
     {
         if ($date) {
             return $this->getLog($date);
@@ -49,32 +49,32 @@ class JsonFileDriver extends AbstractDriver
             $filename = pathinfo($file, PATHINFO_FILENAME);
             if ($dates_as_keys) {
                 $contents[$filename] = $this->getLog($filename);
-            }
-            else {
+            } else {
                 $logs = $this->getLog($filename);
-                foreach($logs as $log) {
+                foreach ($logs as $log) {
                     $contents[] = $log;
                 }
             }
         }
+
         return $contents;
     }
 
-    private function getLog(string $date): array|null
+    private function getLog(string $date): ?array
     {
         $filename = "$date.json";
         $path = config('db-query-logger.drivers.json_file.path');
         $fullpath = "$path/$filename";
-        if (!File::exists($fullpath)) {
+        if (! File::exists($fullpath)) {
             return null;
         }
 
         $contents = File::get($fullpath);
 
         $validator = Validator::make([
-            "contents" => $contents
+            'contents' => $contents,
         ], [
-            "contents" => ["json"]
+            'contents' => ['json'],
         ]);
 
         if ($validator->fails()) {
@@ -82,6 +82,7 @@ class JsonFileDriver extends AbstractDriver
         }
 
         $contents = json_decode($contents, true);
+
         return $contents;
     }
 
@@ -119,5 +120,4 @@ class JsonFileDriver extends AbstractDriver
 
         return $compiled_schema;
     }
-
 }

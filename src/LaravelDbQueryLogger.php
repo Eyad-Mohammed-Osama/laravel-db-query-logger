@@ -13,7 +13,8 @@ class LaravelDbQueryLogger
         $this->driver = app(AbstractDriver::class);
     }
 
-    public function getLogs(?string $date = null, bool $dates_as_keys = true) : array|null {
+    public function getLogs(?string $date = null, bool $dates_as_keys = true): ?array
+    {
         return $this->driver->getLogs($date, $dates_as_keys);
     }
 }

@@ -6,19 +6,18 @@ use Illuminate\Support\Str;
 
 class WebhookDriver extends AbstractDriver
 {
-
     protected function writeLog(): void
     {
-        $callback_url = config("db-query-logger.drivers.webhook.callback_url");
-        $method = Str::lower(config("db-query-logger.drivers.webhook.method"));
-        $secret_header = config("db-query-logger.drivers.webhook.secret.header");
-        $secret_value = config("db-query-logger.drivers.webhook.secret.value");
-        $headers = config("db-query-logger.drivers.webhook.headers");
-        $data = config("db-query-logger.drivers.webhook.data");
+        $callback_url = config('db-query-logger.drivers.webhook.callback_url');
+        $method = Str::lower(config('db-query-logger.drivers.webhook.method'));
+        $secret_header = config('db-query-logger.drivers.webhook.secret.header');
+        $secret_value = config('db-query-logger.drivers.webhook.secret.value');
+        $headers = config('db-query-logger.drivers.webhook.headers');
+        $data = config('db-query-logger.drivers.webhook.data');
 
         if ($secret_value) {
             $headers = array_merge($headers, [
-                $secret_header => $secret_value
+                $secret_header => $secret_value,
             ]);
         }
 
@@ -29,12 +28,13 @@ class WebhookDriver extends AbstractDriver
         $client->{$method}($callback_url, $data);
     }
 
-    public function getLogs(?string $date = null): array|null
+    public function getLogs(?string $date = null): ?array
     {
         return null;
     }
 
-    private function getObject(): array {
+    private function getObject(): array
+    {
         $info = $this->getQueryInfo(); // obtain query information
 
         $data = [

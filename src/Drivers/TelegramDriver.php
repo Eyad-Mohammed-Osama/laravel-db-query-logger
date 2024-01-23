@@ -4,22 +4,21 @@ namespace EyadBereh\LaravelDbQueryLogger\Drivers;
 
 class TelegramDriver extends AbstractDriver
 {
-
     protected function writeLog(): void
     {
-        $bot_token = config("db-query-logger.drivers.telegram.bot_token");
-        $chat_ids = config("db-query-logger.drivers.telegram.chat_ids");
+        $bot_token = config('db-query-logger.drivers.telegram.bot_token');
+        $chat_ids = config('db-query-logger.drivers.telegram.chat_ids');
         $message = $this->getCompiledMessage();
         $url = "https://api.telegram.org/bot{$bot_token}/sendMessage";
         foreach ($chat_ids as $chat_id) {
             \Illuminate\Support\Facades\Http::post($url, [
-                "chat_id" => $chat_id,
-                "text" => $message
+                'chat_id' => $chat_id,
+                'text' => $message,
             ]);
         }
     }
 
-    public function getLogs(?string $date = null): array|null
+    public function getLogs(?string $date = null): ?array
     {
         return null;
     }
