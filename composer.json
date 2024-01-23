@@ -37,8 +37,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "EyadBereh\\LaravelDbQueryLogger\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "EyadBereh\\LaravelDbQueryLogger\\Tests\\": "tests/"
         }
     },
     "scripts": {
